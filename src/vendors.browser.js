@@ -2,7 +2,7 @@
 import 'angular';
 
 // angular-ui-router
-import 'angular-ui-router'
+import 'angular-ui-router';
 
 // angular material
 import 'angular-animate';
@@ -38,4 +38,4 @@ import 'angular-translate-loader-static-files';
 
 import 'wolfy87-eventemitter';
 
-import 'animate.css/animate.min.css'
+import 'animate.css/animate.min.css';
