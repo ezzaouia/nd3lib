@@ -43,5 +43,5 @@ function themeConfig ($mdThemingProvider) {
   });
 }
 
-export default module('app.theme', [])
+export default module('nd3lib.theme', [])
   .config(themeConfig);

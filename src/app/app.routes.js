@@ -14,5 +14,5 @@ function routeConfig ($urlRouterProvider, $stateProvider, $locationProvider) {
 
 }
 
-export default module('app.routes', ['ui.router'])
+export default module('nd3lib.routes', ['ui.router'])
   .config(routeConfig);

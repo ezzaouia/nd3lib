@@ -5,7 +5,9 @@ import AppRoutes from './app.routes';
 
 import HomeComponent from './home/home.component';
 
-export default module('app', [
+import lineChart from './line-chart';
+
+export default module('nd3lib', [
     'ngMaterial',
     'angular-logger',
     'pascalprecht.translate',
@@ -13,7 +15,11 @@ export default module('app', [
     AppTheme.name,
     AppRoutes.name,
 
+    // just for testing
     HomeComponent.name,
+
+    // chart lib components
+    lineChart.name,
 
 ]).component('app', {
     template: '<md-content ng-cloak><div ui-view></div></md-content>',
