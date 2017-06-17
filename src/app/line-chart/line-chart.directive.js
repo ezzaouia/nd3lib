@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 // import textures from 'textures';
 
 import template from './line-chart.directive.html';
+import visugUITemplate from './visug-ui.tmpl.html';
 import './line-chart.directive.scss';
 
 /* global
@@ -16,12 +17,14 @@ _.mixin({
     },
 });
 
-function LineChartController ($timeout, $window, $log) {
+function LineChartController ($timeout, $window, $log, $mdDialog) {
     let lineChart = this;
 
     lineChart.$timeout = $timeout;
     lineChart.$window = $window;
     lineChart.$log = $log;
+    lineChart.$mdDialog = $mdDialog;
+    lineChart.visug = true;
 
     lineChart.rootDiv = d3.select('#nd3lib-line-chart');
     lineChart.width = lineChart.rootDiv.node().offsetWidth || $window.innerWidth;
@@ -46,6 +49,15 @@ function LineChartController ($timeout, $window, $log) {
             { x: 6, val_0: 4.66, val_1: 6.755, val_2: -6.638, val_3: -19.923, color: '#005b9d' },
             { x: 7, val_0: 5, val_1: 3.35, val_2: -13.074, val_3: -12.625, color: '#005b9d' },
         ],
+        dataset1: [
+            { x: 0, val_4: 0, val_5: 0, val_6: 0, val_7: 0, color: '#005b9d' },
+            { x: 1, val_4: 0.993, val_5: 3.894, val_6: 8.47, val_7: 14.347, color: '#005b9d' },
+            { x: 2, val_4: 1.947, val_5: 7.174, val_6: 13.981, val_7: 19.991, color: '#005b9d' },
+        ],
+    };
+
+    lineChart.visugConfig = {
+        yaxis: [],
     };
 
     lineChart.options = {
@@ -121,6 +133,11 @@ LineChartController.prototype.ready = function () {
         lineChart.drawData();
         lineChart.drawXAxis();
         lineChart.drawYAxis();
+
+        if (lineChart.visug) {
+            lineChart.buildVisug();
+            lineChart.$log.debug('visugData ===> ', lineChart.visugData);
+        }
     }
 };
 
@@ -163,8 +180,6 @@ LineChartController.prototype.drawData = function () {
     if (!_.isArray(yaxis)) {
         yaxis = [yaxis];
     }
-
-    console.log('lineChart.getXAxisExtent()',lineChart.getXAxisExtent())
 
     lineChart.xScaleLinear.domain(lineChart.getXAxisExtent());
     lineChart.yScaleLinear.domain(lineChart.getYAxisExtent());
@@ -305,7 +320,7 @@ LineChartController.prototype.getXAxisExtent = function () {
     // case (1)
     if (_.isObject(xaxis) && xaxis.hasOwnProperty('dataset') && xaxis.hasOwnProperty('key')) {
         lineChart.$log.debug('xamax case 1');
-        return [0,_.max(_.project(lineChart, `data.${_.get(xaxis, 'dataset')}`, _.get(xaxis, 'key')))];
+        return [0, _.max(_.project(lineChart, `data.${_.get(xaxis, 'dataset')}`, _.get(xaxis, 'key')))];
     }
     // case (2)
     if (_.size(xaxis) === _.size(yaxis)) {
@@ -346,6 +361,43 @@ LineChartController.prototype.getYAxisExtent = function () {
     });
     return [min, max];
 };
+
+LineChartController.prototype.buildVisug = function () {
+    let lineChart = this;
+    lineChart.visugUIData = {};
+    _.each(_.get(lineChart, 'data'), (dataset, k) => {
+        lineChart.visugUIData[k] = _.chain(dataset)
+            .flatMap(item => _.keys(item))
+            .uniq()
+            .remove(item => item !== '$$hashKey') // we keep remaining elements  
+            .value();
+    });
+
+    return lineChart.visugUIData;
+};
+
+LineChartController.prototype.openVisugUI = function (ev) {
+    let lineChart = this;
+    lineChart.$mdDialog.show({
+        controller: function ($mdDialog) {
+            let VisugUI = this;
+            VisugUI.visugUIData = lineChart.visugUIData;
+        },
+        template: visugUITemplate,
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        controllerAs: 'VisugUI',
+        clickOutsideToClose: true,
+        // fullscreen: $scope.customFullscreen,
+    }).then(function (answer) {
+        // $scope.status = 'You said the information was "' + answer + '".';
+    }, function () {
+        // $scope.status = 'You cancelled the dialog.';
+    });
+};
+
+function VisugUIController () {
+}
 
 const lineChart = {
     restricted: 'E',

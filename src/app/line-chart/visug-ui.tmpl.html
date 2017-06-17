@@ -1,0 +1,27 @@
+<h3>visug-ui.tmpl.html</h3>
+
+<md-content>
+    <div class="visug-ui-container" ng-repeat="(datasetName, keys) in VisugUI.visugUIData">
+        <div class="visug-ui-header">
+            <div class="visug-ui-header-dataset">
+                {{datasetName}}
+            </div>
+            <div class="visug-ui-header-labels">
+                Show | Line | Dot
+            </div>
+        </div>
+        <div class="visug-ui-checks" ng-repeat="key in keys">
+            <div class="visug-ui-checks-key">
+                {{key}}
+            </div>
+            <div class="visug-ui-checks-box">
+                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                </md-checkbox>
+            </div>
+        </div>
+    </div>
+</md-content>

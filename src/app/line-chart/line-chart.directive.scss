@@ -1,3 +1,31 @@
 #nd3lib-line-chart {
-    width: 900px;
+    width: 700px;
+    display: flex;
+    #nd3lib-line-chart-visug {
+        width: 300px;
+    }
+}
+
+.visug-ui-container {
+    display: flex;
+    flex-flow: column;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 300px;
+}
+
+.visug-ui-header {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.visug-ui-checks {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between; //align-self: flex-end;
+}
+
+.visug-ui-checks-key {
+    padding-left: 35px;
 }
